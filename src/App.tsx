@@ -1,9 +1,8 @@
-import React from 'react';
-import {AgGridColumn, AgGridReact} from 'ag-grid-react';
-import getPopularRepos, { PopularRepo } from './services/github/getPopularRepos';
+import React from 'react'
+import getPopularRepos, { PopularRepo } from './services/github/getPopularRepos'
 import Header from './components/Header/Header'
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import ReposGrid from './components/ReposGrid/ReposGrid'
+
 
 const App = () => {
 
@@ -21,15 +20,7 @@ const App = () => {
   return (
     <div className='container'>
       <Header repos={repos} setFilteredRepos={setFilteredRepos}/>
-        <div className="ag-theme-alpine" style={{height: '100vh', width: '100%'}}>
-            <AgGridReact
-                rowData={filteredRepos}>
-                <AgGridColumn field="name" flex={1}></AgGridColumn>
-                <AgGridColumn field="description" flex={2}></AgGridColumn>
-                <AgGridColumn field="link" flex={2}></AgGridColumn>
-                <AgGridColumn field="stars" width={100}></AgGridColumn>
-            </AgGridReact>
-        </div>
+      <ReposGrid filteredRepos={filteredRepos} />
     </div>
   );
 }
