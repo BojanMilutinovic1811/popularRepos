@@ -6,6 +6,7 @@ export interface PopularRepo {
     id: number,
     name: string,
     stars: number,
+    link: string,
     description?: string | null,
     isFavorite?: boolean
 }
@@ -21,11 +22,12 @@ const getPopularRepos  = async (inLastDays = 7, numOfRepos = 30): Promise<Popula
     const response = await fetch(url, config)
     const data = await response.json()
     const popularRepos = data.items.map((repo: any): PopularRepo => {
-        const {id, name, description, stargazers_count} = repo
+        const {id, name, description, stargazers_count, url} = repo
         return {
             id,
             name,
             description,
+            link: url,
             stars: stargazers_count,
         }
     })
