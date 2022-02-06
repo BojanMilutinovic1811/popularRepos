@@ -23,12 +23,17 @@ const getPopularRepos  = async (inLastDays = 7, numOfRepos = 30): Promise<Popula
     const data = await response.json()
     const popularRepos = data.items.map((repo: any): PopularRepo => {
         const {id, name, description, stargazers_count, url} = repo
+        const isFavorite = () => {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+            return favorites.some((favorite: any) => favorite.id === id)
+        }
         return {
             id,
             name,
             description,
             link: url,
             stars: stargazers_count,
+            isFavorite: isFavorite()
         }
     })
     return popularRepos

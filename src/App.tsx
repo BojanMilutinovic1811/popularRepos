@@ -6,21 +6,25 @@ import ReposGrid from './components/ReposGrid/ReposGrid'
 
 const App = () => {
 
-  const [repos, setRepos] = React.useState<PopularRepo[]>([])
-  const [filteredRepos, setFilteredRepos] = React.useState<PopularRepo[]>([])
+    const [repos, setRepos] = React.useState<PopularRepo[]>([])
+    const [filteredRepos, setFilteredRepos] = React.useState<PopularRepo[]>([])
 
-  React.useEffect(() => {
-    getPopularRepos()
-      .then((popularRepos: PopularRepo[]) => {
-        setRepos(popularRepos)
-        setFilteredRepos(popularRepos)
-      })
-  }, [])
+    React.useEffect(() => {
+      getPopularRepos()
+        .then((popularRepos: PopularRepo[]) => {
+          setRepos(popularRepos)
+          setFilteredRepos(popularRepos)
+        })
+    }, [])
+
+    React.useEffect(() => {
+      setFilteredRepos(repos)
+    }, [repos])
 
   return (
     <div className='container'>
       <Header repos={repos} setFilteredRepos={setFilteredRepos}/>
-      <ReposGrid filteredRepos={filteredRepos} />
+      <ReposGrid filteredRepos={filteredRepos} setFilteredRepos={setFilteredRepos} />
     </div>
   );
 }
