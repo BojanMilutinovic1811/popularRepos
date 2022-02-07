@@ -13,7 +13,7 @@ export interface PopularRepo {
 }
 
 const getPopularRepos  = async (inLastDays = 7, numOfRepos = 30): Promise<PopularRepo[]> => {
-    const url = `https://api.github.com/search/repositories?q=created:>${formatDate(inLastDays)}&sort=stars&order=desc`
+    const url = `https://api.github.com/search/repositories?q=created:>${formatDate(inLastDays)}&sort=stars&order=desc&per_page=${numOfRepos}`
     const config = token ? {
         'method': 'GET',
         'headers': {

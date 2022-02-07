@@ -7,18 +7,19 @@ import FavoriteReposGrid from './components/FavoriteReposGrid/FavoriteReposGrid'
 
 const App = () => {
 
+    const [numOfRepos, setNumOfRepos] = React.useState(10)
     const [repos, setRepos] = React.useState<PopularRepo[]>([])
     const [filteredRepos, setFilteredRepos] = React.useState<PopularRepo[]>([])
     const [favoriteRepos, setFavoriteRepos] = React.useState<PopularRepo[]>(JSON.parse(localStorage.getItem('favorites') || '[]'))
     const [displayFavorite, setDisplayFavorite] = React.useState(false)
 
     React.useEffect(() => {
-      getPopularRepos()
+      getPopularRepos(7, numOfRepos)
         .then((popularRepos: PopularRepo[]) => {
           setRepos(popularRepos)
           setFilteredRepos(popularRepos)
         })
-    }, [])
+    }, [numOfRepos])
 
     React.useEffect(() => {
       setFilteredRepos(repos)
@@ -30,6 +31,7 @@ const App = () => {
               setFilteredRepos={setFilteredRepos} 
               displayFavorite={displayFavorite}
               setDisplayFavorite={setDisplayFavorite}
+              setNumOfRepos={setNumOfRepos}
       />
       {displayFavorite ? <FavoriteReposGrid  favoriteRepos={favoriteRepos}/>
                        : <ReposGrid filteredRepos={filteredRepos} 
