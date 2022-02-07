@@ -1,18 +1,15 @@
 import React from 'react'
 import {AgGridColumn, AgGridReact} from 'ag-grid-react';
-import Props from './Types'
+import makeLink from '../../utilities/makeLinkColumn';
+import formatDate from '../../utilities/formatDate';
+import Props from './types'
 import './styles.css'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { CellClickedEvent } from 'ag-grid-community/dist/lib/events';
 
-const ReposGrid = ({filteredRepos, setFilteredRepos}: Props): React.ReactElement => {
-
-    const makeLink = (params: any): string => {
-        const link = params.value.replace('https://api.github.com/repos/', 'https://github.com/')
-       return `<a href="${link}" target="_blank">${link}</a>`
-    }
+const ReposGrid = ({filteredRepos, setFilteredRepos, setFavoriteRepos}: Props): React.ReactElement => {
 
     const makeFavorite = (params: any): string => {
         return params.data.isFavorite ? 'remove' : 'add'
@@ -25,8 +22,10 @@ const ReposGrid = ({filteredRepos, setFilteredRepos}: Props): React.ReactElement
             if (isFavorite) {
                 favorites = favorites.filter((repo: any) => repo.id !== id)
             } else {
+                params.data.date = formatDate(0)
                 favorites.push(params.data)    
             }
+            setFavoriteRepos(favorites)
             let repos = [...filteredRepos]
             let clickedRepo = repos.find((repo) => repo.id === id)
             //@ts-ignore

@@ -9,6 +9,7 @@ export interface PopularRepo {
     link: string,
     description?: string | null,
     isFavorite?: boolean
+    date?: string,
 }
 
 const getPopularRepos  = async (inLastDays = 7, numOfRepos = 30): Promise<PopularRepo[]> => {
@@ -21,10 +22,10 @@ const getPopularRepos  = async (inLastDays = 7, numOfRepos = 30): Promise<Popula
     }: {}
     const response = await fetch(url, config)
     const data = await response.json()
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
     const popularRepos = data.items.map((repo: any): PopularRepo => {
         const {id, name, description, stargazers_count, url} = repo
         const isFavorite = () => {
-            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
             return favorites.some((favorite: any) => favorite.id === id)
         }
         return {
