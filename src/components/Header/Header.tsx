@@ -1,16 +1,35 @@
 import React from 'react'
-import { PopularRepo } from '../../services/github/getPopularRepos';
-import Props from './Types'
+import { useSelector, useDispatch } from "react-redux";
+import { State } from '../../store'
 
-const Header = ({repos, setFilteredRepos, displayFavorite, setDisplayFavorite, setNumOfRepos}: Props): React.ReactElement => {
+import { PopularRepo } from '../../services/github/getPopularRepos';
+
+const Header = (): React.ReactElement => {
+
+    const dispatch = useDispatch()
+    const state = useSelector((state: State) => state)
+    const { repos, displayFavorite } = state
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const filtered: PopularRepo[] = repos.filter((repo: PopularRepo) => repo.name.toLowerCase().includes(e.target.value))
-        setFilteredRepos(filtered)
+        dispatch({
+            type: "SET_FILTERED",
+            payload: filtered
+          })
       }
 
     const handleNumOfRepos = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setNumOfRepos(Number(e.target.value))
+        dispatch({
+            type: "SET_REPOS_NUM",
+            payload: Number(e.target.value)
+          })
+    }
+
+    const handleDisplayButton = (): void => {
+        dispatch({
+            type: "TOGGLE_DISPLAY",
+            payload: !displayFavorite
+          })
     }
 
     return (
@@ -37,7 +56,7 @@ const Header = ({repos, setFilteredRepos, displayFavorite, setDisplayFavorite, s
                     </div>
                 </div> } 
             <div className='col-md-3 mb-2'>
-                <button type='button' className='btn btn-primary w-100' onClick={() => setDisplayFavorite(!displayFavorite)}>
+                <button type='button' className='btn btn-primary w-100' onClick={handleDisplayButton}>
                     {displayFavorite ? 'Display all' : 'Display favorite'}
                 </button>
             </div>

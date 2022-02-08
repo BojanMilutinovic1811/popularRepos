@@ -1,12 +1,16 @@
 import React from 'react'
 import {AgGridColumn, AgGridReact} from 'ag-grid-react';
+import { useSelector } from "react-redux";
+import { State } from '../../store'
 import makeLink from '../../utilities/makeLinkColumn';
-import Props from './types'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
-const ReposGrid = ({favoriteRepos}: Props): React.ReactElement => {
+const ReposGrid = (): React.ReactElement => {
+
+    const state = useSelector((state: State) => state)
+    const { favoriteRepos } = state
 
     return(
         <div className="ag-theme-alpine customGrid">

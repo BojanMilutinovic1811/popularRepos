@@ -1,15 +1,20 @@
 import React from 'react'
 import {AgGridColumn, AgGridReact} from 'ag-grid-react';
+import { useSelector, useDispatch } from "react-redux";
+import { State } from '../../store'
 import makeLink from '../../utilities/makeLinkColumn';
 import formatDate from '../../utilities/formatDate';
-import Props from './types'
 import './styles.css'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { CellClickedEvent } from 'ag-grid-community/dist/lib/events';
 
-const ReposGrid = ({filteredRepos, setFilteredRepos, setFavoriteRepos}: Props): React.ReactElement => {
+const ReposGrid = (): React.ReactElement => {
+
+    const dispatch = useDispatch()
+    const state = useSelector((state: State) => state)
+    const { filteredRepos } = state
 
     const makeFavorite = (params: any): string => {
         return params.data.isFavorite ? 'remove' : 'add'
@@ -25,12 +30,14 @@ const ReposGrid = ({filteredRepos, setFilteredRepos, setFavoriteRepos}: Props): 
                 params.data.date = formatDate(0)
                 favorites.push(params.data)    
             }
-            setFavoriteRepos(favorites)
             let repos = [...filteredRepos]
             let clickedRepo = repos.find((repo) => repo.id === id)
             //@ts-ignore
             clickedRepo.isFavorite = !isFavorite
-            setFilteredRepos(repos)
+            dispatch({
+                type: "SET_FILTERED",
+                payload: repos
+              })
             localStorage.setItem('favorites', JSON.stringify(favorites))
         }
     } 
